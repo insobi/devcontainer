@@ -7,7 +7,8 @@ FROM ubuntu:focal
 ENV VERSION_TERRAFORM=1.0.0 \
     VERSION_ANSIBLE=2.9.13 \
     VERSION_TF_PROVIDER_ACI=0.7.0 \
-    VERSION_ANSIBLE_ACI=2.0.0
+    VERSION_ANSIBLE_ACI=2.0.0 \
+    VERSION_ANSIBLE_NXOS=2.3.0
 
 RUN echo "Installing python3 and packages -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -15,7 +16,7 @@ RUN echo "Installing python3 and packages -->" \
 
 RUN echo "Installing common utils -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends wget unzip curl tree git
+    && apt-get -y install --no-install-recommends wget unzip curl tree git ssh
 
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} -->"  \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
@@ -35,10 +36,11 @@ RUN echo "Installing Terraform Provider: Cisco ACI ${VERSION_TF_PROVIDER_ACI} --
     && unzip -d /root/.terraform.d/plugins/registry.terraform.io/ciscodevnet/aci/${VERSION_TF_PROVIDER_ACI}/linux_amd64 /tmp/tf_aci.zip \
     && rm -f /tmp/tf_aci.zip
 
-# Ansible Collection: Cisco ACI
-RUN echo "Installing Ansible collection: cisco.aci -->" \ 
-    && ansible-galaxy collection install cisco.aci:==${VERSION_ANSIBLE_ACI}
+# Ansible Collections
+RUN echo "Installing Ansible collections -->" \ 
+    && ansible-galaxy collection install cisco.aci:==${VERSION_ANSIBLE_ACI} \
+    && ansible-galaxy collection install cisco.nxos:==${VERSION_ANSIBLE_NXOS}
 
 # MS Excel file handler
-RUN echo "Installing python package: openpyxl pandas -->" \ 
-    && pip3 install openpyxl pandas
+RUN echo "Installing python packages -->" \ 
+    && pip3 install openpyxl pandas paramiko
