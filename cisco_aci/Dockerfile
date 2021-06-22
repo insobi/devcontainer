@@ -23,7 +23,8 @@ RUN echo "Installing Terraform ${VERSION_TERRAFORM} -->"  \
     && unzip -d /usr/bin /tmp/terraform.zip \
     && chmod +x /usr/bin/terraform \
     && mkdir -p /root/.terraform.cache/plugin-cache \
-    && rm -f /tmp/terraform.zip
+    && rm -f /tmp/terraform.zip \
+    && terraform -install-autocomplete
 
 RUN echo "Installing Ansible ${VERSION_ANSIBLE} -->" \
     && pip3 install --no-cache-dir ansible==${VERSION_ANSIBLE} \
