@@ -12,7 +12,8 @@ ENV VERSION_TERRAFORM=1.0.0 \
 
 RUN echo "Installing python3 and packages -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends python3 python3-pip python3-setuptools
+    && apt-get -y install --no-install-recommends python3 python3-pip python3-setuptools \
+    && ln -s /usr/bin/python3 /usr/bin/python
 
 RUN echo "Installing common utils -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
