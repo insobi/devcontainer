@@ -6,7 +6,7 @@ FROM ubuntu:focal
 
 ENV VERSION_TERRAFORM=1.0.0 \
     VERSION_ANSIBLE=2.9.13 \
-    VERSION_TF_PROVIDER_ACI=0.7.0 \
+    VERSION_TF_PROVIDER_ACI=0.7.1 \
     VERSION_ANSIBLE_ACI=2.0.0 \
     VERSION_ANSIBLE_NXOS=2.3.0
 
@@ -17,9 +17,10 @@ RUN echo "Installing python3 and packages -->" \
 
 RUN echo "Installing common utils -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends wget unzip curl tree git ssh
+    && apt-get -y install --no-install-recommends wget unzip curl tree git ssh gawk sshpass
 
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} -->"  \
+    && apt update && apt install --yes unzip curl \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
     && unzip -d /usr/bin /tmp/terraform.zip \
     && chmod +x /usr/bin/terraform \
