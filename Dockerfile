@@ -58,3 +58,6 @@ RUN echo "Installing Helm --> " \
     && echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list \
     && apt-get update \
     && apt-get install helm -y
+
+RUN echo "Installing Ansible collection - community.docker -->" \ 
+    && ansible-galaxy collection install community.docker
