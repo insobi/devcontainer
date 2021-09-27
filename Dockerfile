@@ -13,7 +13,7 @@ RUN echo "Installing common utils -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends wget unzip curl tree git ssh gawk sshpass jq iputils-ping
 
-ENV VERSION_TERRAFORM=1.0.4
+ENV VERSION_TERRAFORM=1.0.7
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} -->"  \
     && apt update && apt install --yes unzip curl \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
@@ -61,3 +61,18 @@ RUN echo "Installing Helm --> " \
 
 RUN echo "Installing Ansible collection - community.docker -->" \ 
     && ansible-galaxy collection install community.docker
+
+RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
+COPY files/openssl.cnf /etc/ssl/openssl.cnf
+
+RUN mkdir /etc/ansible
+COPY files/ansible/ansible.cfg /etc/ansible/ansible.cfg
+COPY files/ansible/hosts /etc/ansible/hosts
+
+RUN ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""
+RUN echo "" > passwd 
+
+RUN sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/" /etc/ssh/sshd_config
+# RUN echo "Installing sshd --> " \
+#     && apt update \
+#     && apt-get install openssh-server --yes
