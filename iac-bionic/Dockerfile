@@ -8,7 +8,8 @@ RUN echo "Install Linux packages --->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install wget unzip curl tree git ssh gawk sshpass software-properties-common --yes \
     && apt-get install build-essential checkinstall --yes \
-    && apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev --yes
+    && apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev --yes \
+    && apt-get install jq iputils-ping --yes
 
 ENV VERSION_PYTHON=3.9.6
 RUN echo "Install Python ${VERSION_PYTHON} --->" \
