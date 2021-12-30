@@ -1,4 +1,6 @@
-.dev
-.tmp
-.test
-.DS_Store
+**/.dev
+**/.tmp
+**/.test
+**/.DS_Store
+
+tmp

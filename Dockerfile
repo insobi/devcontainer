@@ -13,7 +13,7 @@ RUN echo "Installing common utils -->" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends wget unzip curl tree git ssh gawk sshpass jq iputils-ping
 
-ENV VERSION_TERRAFORM=1.0.7
+ENV VERSION_TERRAFORM=1.1.2
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} -->"  \
     && apt update && apt install --yes unzip curl \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
@@ -29,7 +29,7 @@ RUN echo "Installing Ansible ${VERSION_ANSIBLE} -->" \
     && pip3 install jmespath
 
 # Terraform Provider - ciscodevnet/aci
-ENV VERSION_TF_PROVIDER_ACI=0.7.1
+ENV VERSION_TF_PROVIDER_ACI=1.2.0
 RUN echo "Installing Terraform Provider: Cisco ACI ${VERSION_TF_PROVIDER_ACI} -->"  \
     && curl -sSL -o /tmp/tf_aci.zip https://releases.hashicorp.com/terraform-provider-aci/${VERSION_TF_PROVIDER_ACI}/terraform-provider-aci_${VERSION_TF_PROVIDER_ACI}_linux_amd64.zip 2>&1 \
     && mkdir -p /root/.terraform.d/plugins/registry.terraform.io/ciscodevnet/aci/${VERSION_TF_PROVIDER_ACI}/linux_amd64 \
