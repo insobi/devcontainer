@@ -77,3 +77,7 @@ COPY files/openssl.cnf /etc/ssl/openssl.cnf
 # RUN echo "Installing sshd --> " \
 #     && apt update \
 #     && apt-get install openssh-server --yes
+
+ENV VAULT_VERSION=1.9.2
+RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
+    && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
