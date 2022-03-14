@@ -19,7 +19,7 @@ RUN echo "Installing python packages >>> " \
         jmespath \
         paramiko 
 
-ENV VERSION_TERRAFORM=1.1.3
+ENV VERSION_TERRAFORM=1.1.7
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
     && unzip -d /usr/bin /tmp/terraform.zip \
@@ -28,7 +28,7 @@ RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && rm -f /tmp/terraform.zip \
     && terraform -install-autocomplete
 
-ENV VERSION_ANSIBLE=2.9.13
+ENV VERSION_ANSIBLE=5.4.0
 RUN echo "Installing Ansible ${VERSION_ANSIBLE} >>> " \
     && pip3 install --no-cache-dir ansible==${VERSION_ANSIBLE}
 
@@ -45,7 +45,8 @@ ENV VERSION_ANSIBLE_ACI=2.1.0
 RUN echo "Installing Ansible collections >>> " \ 
     && ansible-galaxy collection install \
         cisco.aci:==${VERSION_ANSIBLE_ACI} \
-        community.docker
+        community.docker \
+        community.general  
 
 RUN mkdir /etc/ansible
 COPY files/ansible/ansible.cfg /etc/ansible/ansible.cfg
@@ -78,6 +79,6 @@ COPY files/openssl.cnf /etc/ssl/openssl.cnf
 #     && apt update \
 #     && apt-get install openssh-server --yes
 
-ENV VAULT_VERSION=1.9.2
-RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
-    && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
+# ENV VAULT_VERSION=1.9.2
+# RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
+#     && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
