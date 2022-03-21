@@ -48,6 +48,11 @@ RUN echo "Installing Ansible collections >>> " \
         community.docker \
         community.general  
 
+# Python packages related Ansible Collection
+RUN echo "Installing python packages >>> " \ 
+    && pip3 install \
+        python-gitlab
+
 RUN mkdir /etc/ansible
 COPY files/ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY files/ansible/hosts /etc/ansible/hosts
@@ -82,6 +87,3 @@ COPY files/openssl.cnf /etc/ssl/openssl.cnf
 # ENV VAULT_VERSION=1.9.2
 # RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
 #     && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
-
-RUN echo "Installing GLab >>> " \
-    && curl -s https://raw.githubusercontent.com/profclems/glab/trunk/scripts/install.sh | sh
