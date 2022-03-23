@@ -33,7 +33,7 @@ RUN echo "Installing Ansible ${VERSION_ANSIBLE} >>> " \
     && pip3 install --no-cache-dir ansible==${VERSION_ANSIBLE}
 
 # Terraform Provider - CiscoDevNet/aci
-ENV VERSION_TF_PROVIDER_ACI=1.2.0
+ENV VERSION_TF_PROVIDER_ACI=2.1.0
 RUN echo "Installing Terraform Provider: Cisco ACI ${VERSION_TF_PROVIDER_ACI} >>> " \
     && curl -sSL -o /tmp/tf_aci.zip https://releases.hashicorp.com/terraform-provider-aci/${VERSION_TF_PROVIDER_ACI}/terraform-provider-aci_${VERSION_TF_PROVIDER_ACI}_linux_amd64.zip 2>&1 \
     && mkdir -p /root/.terraform.d/plugins/registry.terraform.io/ciscodevnet/aci/${VERSION_TF_PROVIDER_ACI}/linux_amd64 \
@@ -69,9 +69,6 @@ RUN echo "Installing Helm >>> " \
     && echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list \
     && apt-get update \
     && apt-get install helm --yes
-
-# RUN echo "Installing Ansible collection - community.docker -->" \ 
-#     && ansible-galaxy collection install community.docker
 
 RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
 COPY files/openssl.cnf /etc/ssl/openssl.cnf
