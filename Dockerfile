@@ -17,9 +17,11 @@ RUN echo "Installing python packages >>> " \
     && pip3 install \
         openpyxl pandas \
         jmespath \
-        paramiko 
+        paramiko \
+        python-gitlab \
+        pyvmomi
 
-ENV VERSION_TERRAFORM=1.1.7
+ENV VERSION_TERRAFORM=1.1.8
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
     && unzip -d /usr/bin /tmp/terraform.zip \
@@ -28,7 +30,7 @@ RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && rm -f /tmp/terraform.zip \
     && terraform -install-autocomplete
 
-ENV VERSION_ANSIBLE=5.4.0
+ENV VERSION_ANSIBLE=5.6.0
 RUN echo "Installing Ansible ${VERSION_ANSIBLE} >>> " \
     && pip3 install --no-cache-dir ansible==${VERSION_ANSIBLE}
 
@@ -48,11 +50,6 @@ RUN echo "Installing Ansible collections >>> " \
         community.docker \
         community.general  
 
-# Python packages related Ansible Collection
-RUN echo "Installing python packages >>> " \ 
-    && pip3 install \
-        python-gitlab
-
 RUN mkdir /etc/ansible
 COPY files/ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY files/ansible/hosts /etc/ansible/hosts
@@ -70,8 +67,8 @@ RUN echo "Installing Helm >>> " \
     && apt-get update \
     && apt-get install helm --yes
 
-RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
-COPY files/openssl.cnf /etc/ssl/openssl.cnf
+# RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
+# COPY files/openssl.cnf /etc/ssl/openssl.cnf
 
 # RUN ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""
 # RUN echo "" > passwd 
@@ -85,7 +82,7 @@ COPY files/openssl.cnf /etc/ssl/openssl.cnf
 # RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
 #     && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
 
-ENV VERSION_CONCOURSE=7.7.0
+ENV VERSION_CONCOURSE=7.7.1
 RUN echo "Installing Concourse CLI - fly >>>" \ 
     && curl -sSL -o - https://github.com/concourse/concourse/releases/download/v${VERSION_CONCOURSE}/fly-${VERSION_CONCOURSE}-linux-amd64.tgz 2>&1 | tar xvfz - -C /tmp \
     && mv /tmp/fly /usr/bin/fly \
