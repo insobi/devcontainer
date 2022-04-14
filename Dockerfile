@@ -67,9 +67,6 @@ RUN echo "Installing Helm >>> " \
     && apt-get update \
     && apt-get install helm --yes
 
-# RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
-# COPY files/openssl.cnf /etc/ssl/openssl.cnf
-
 # RUN ssh-keygen -t rsa -q -f "$HOME/.ssh/id_rsa" -N ""
 # RUN echo "" > passwd 
 
@@ -87,3 +84,6 @@ RUN echo "Installing Concourse CLI - fly >>>" \
     && curl -sSL -o - https://github.com/concourse/concourse/releases/download/v${VERSION_CONCOURSE}/fly-${VERSION_CONCOURSE}-linux-amd64.tgz 2>&1 | tar xvfz - -C /tmp \
     && mv /tmp/fly /usr/bin/fly \
     && chmod a+x /usr/bin/fly
+
+RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
+COPY files/openssl.cnf /etc/ssl/openssl.cnf
