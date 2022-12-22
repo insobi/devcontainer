@@ -15,13 +15,14 @@ RUN echo "Installing common utils >>> " \
 # Ansible json_query - jmespath
 RUN echo "Installing python packages >>> " \ 
     && pip3 install \
-        openpyxl pandas \
+        openpyxl \
+        pandas \
         jmespath \
         paramiko \
         python-gitlab \
         pyvmomi
 
-ENV VERSION_TERRAFORM=1.1.8
+ENV VERSION_TERRAFORM=1.3.6
 RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && curl -sSL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${VERSION_TERRAFORM}/terraform_${VERSION_TERRAFORM}_linux_amd64.zip 2>&1 \
     && unzip -d /usr/bin /tmp/terraform.zip \
@@ -30,12 +31,12 @@ RUN echo "Installing Terraform ${VERSION_TERRAFORM} >>> "  \
     && rm -f /tmp/terraform.zip \
     && terraform -install-autocomplete
 
-ENV VERSION_ANSIBLE=5.6.0
+ENV VERSION_ANSIBLE=6.7.0
 RUN echo "Installing Ansible ${VERSION_ANSIBLE} >>> " \
     && pip3 install --no-cache-dir ansible==${VERSION_ANSIBLE}
 
 # Terraform Provider - CiscoDevNet/aci
-ENV VERSION_TF_PROVIDER_ACI=2.1.0
+ENV VERSION_TF_PROVIDER_ACI=2.5.2
 RUN echo "Installing Terraform Provider: Cisco ACI ${VERSION_TF_PROVIDER_ACI} >>> " \
     && curl -sSL -o /tmp/tf_aci.zip https://releases.hashicorp.com/terraform-provider-aci/${VERSION_TF_PROVIDER_ACI}/terraform-provider-aci_${VERSION_TF_PROVIDER_ACI}_linux_amd64.zip 2>&1 \
     && mkdir -p /root/.terraform.d/plugins/registry.terraform.io/ciscodevnet/aci/${VERSION_TF_PROVIDER_ACI}/linux_amd64 \
@@ -43,7 +44,7 @@ RUN echo "Installing Terraform Provider: Cisco ACI ${VERSION_TF_PROVIDER_ACI} >>
     && rm -f /tmp/tf_aci.zip
 
 # Ansible Collections
-ENV VERSION_ANSIBLE_ACI=2.1.0
+ENV VERSION_ANSIBLE_ACI=2.3.0
 RUN echo "Installing Ansible collections >>> " \ 
     && ansible-galaxy collection install \
         cisco.aci:==${VERSION_ANSIBLE_ACI} \
@@ -79,7 +80,7 @@ RUN echo "Installing Helm >>> " \
 # RUN wget https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault.zip \
 #     && unzip -d /usr/bin/ /tmp/vault.zip && rm -f /tmp/vault.zip && chmod +x /usr/bin/vault
 
-ENV VERSION_CONCOURSE=7.7.1
+ENV VERSION_CONCOURSE=7.9.0
 RUN echo "Installing Concourse CLI - fly >>>" \ 
     && curl -sSL -o - https://github.com/concourse/concourse/releases/download/v${VERSION_CONCOURSE}/fly-${VERSION_CONCOURSE}-linux-amd64.tgz 2>&1 | tar xvfz - -C /tmp \
     && mv /tmp/fly /usr/bin/fly \
@@ -87,3 +88,32 @@ RUN echo "Installing Concourse CLI - fly >>>" \
 
 RUN mv /etc/ssl/openssl.cnf /etc/ssl/openssl.cnf.bak
 COPY files/openssl.cnf /etc/ssl/openssl.cnf
+
+# ENV VERSION_GOLANG=1.19.4
+# RUN cd /tmp \
+#     && curl -sSL -o go.tar.gz https://go.dev/dl/go${VERSION_GOLANG}.linux-amd64.tar.gz \
+#     && tar xvf go.tar.gz -C /usr/local \
+#     && export PATH=$PATH:/usr/local/go/bin
+
+# ENV PATH=$PATH:/usr/local/go/bin
+
+# RUN cd /tmp \
+#     && git clone https://github.com/ciscoecosystem/terraformer.git -b aci-provider \
+#     && cd /tmp/terraformer \
+#     # && PATH=$PATH:/usr/local/go/bin \
+#     && /usr/local/go/bin/go build -v
+
+# RUN cd /tmp/terraformer \
+#     && /usr/local/go/bin/go run build/main.go aci
+
+# RUN cd /tmp/terraformer \
+#     && chmod +x terraformer terraformer-aci \
+#     && cp terraformer /usr/local/bin/terraformer \
+#     && cp terraformer-aci /usr/local/bin/terraformer-aci
+    
+COPY terraformer-aci_linux_amd64 /usr/local/bin/terraformer-aci
+RUN chmod +x /usr/local/bin/terraformer-aci
+
+# RUN rm -rf /tmp/terraformer \
+#         /tmp/go${VERSION_GOLANG}.linux-amd64.tar.gz \
+#         /usr/local/bin/terraformer

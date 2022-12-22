@@ -14,3 +14,11 @@ Please refer to https://code.visualstudio.com/docs/remote/containers
   - Python 3.x
   - Etc.
 - Cisco DNAC Python SDK
+
+# troubleshoot
+
+Resolve an error which is "qemu-x86_64: Could not open '/lib64/ld-linux-x86-64.so.2': No such file or directory" 
+
+```
+docker build --platform=linux/amd64 -t ...
+```
